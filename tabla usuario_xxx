@@ -1,0 +1,44 @@
+
+create table usuario_xxx(id_usuario integer,login varchar2(120),edad integer,constraint pk_id_usuario primary key (id_usuario));
+
+//crear la sec asociada
+
+create sequence sec_usuario_xxx
+start with 1
+increment by 1
+nomaxvalue;
+
+
+//crear el procedimiento guardar_usuario_xxx
+//que guarde a un usuario_xxx
+//NOTA:si la edad es menor de 18 que marque unerror
+//y que impida la inserccion
+
+
+create or replace procedure guardar_usuario_xxx(my_id out integer,my_login in varchar2,my_edad in integer)as
+begin
+
+if my_edad > 17 then
+  select sec_usuario_xxx.nextval into my_id from dual;
+  insert into usuario_xxx(id_usuario,login,edad) values (my_id,my_login,my_edad);
+
+  else
+    raise_application_error(-20001,'lo siento no puedes entrar');
+    
+    end if; 
+    end;
+    /
+    
+    set serveroutput on;
+    //probarlo
+    
+    declare
+    valor integer;
+    begin
+    guardar_usuario_xxx(valor,'perversoz',10);
+    dbms_output.put_line('ya te registramos');
+    end;
+    /
+    
+    select * from usuario_xxx;
+
