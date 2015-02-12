@@ -1,0 +1,38 @@
+
+--crear tabla
+create table empleado(id integer, nombre varchar2(120),sueldo float);
+
+--insertar 5 registros en la tabla(solo cambiale los valores)
+INSERT INTO empleado VALUES(5,'victor',7900);
+
+--mostrar los valores insertados
+select *from empleado;
+
+--por si te equivocaste y lo quieres cambiar
+update empleado set sueldo=2000 where nombre='jose';
+
+
+/*asignar un sueldo al 2 un sueldoo de 10000
+declaree es para asinar las variables*/
+set serveroutput on;
+declare
+nuevo_sueldo float;
+begin
+select sueldo into nuevo_sueldo from empleado where id=2;
+--imprimir
+dbms_output.put_line('el sueldo seleccionado es'||nuevo_sueldo);
+end;
+/
+
+declare
+/*el cursor es la tabla*/ 
+cursor cursor_empleado is select * from empleado;
+begin
+--es para iterar(asignar) el cursor
+/*gatonejo va a adquirir el valor de la fila completa de la tabla y 
+cuando pongo gatonejo.nombre es para q me muestre el campo correspondiente*/
+  for gatonejo in cursor_empleado loop
+  dbms_output.put_line('mensaje'|| gatonejo.nombre);
+  end loop;
+end;
+/
