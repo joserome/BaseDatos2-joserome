@@ -28,7 +28,7 @@ begin
  
    for rec in cursor_actualizar_emp loop 
   
-  
+  --la fecha solo se puede poner un igual si se transforma a un varchar
     if to_char(rec.fecha, 'dd') = '01' then  
   
        if rec.sueldo > 6000 then 
