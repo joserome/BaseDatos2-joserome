@@ -1,0 +1,54 @@
+--crear tabla  
+  create table empleado(id integer, nombre varchar2(120),sueldo float,fecha date);  
+    
+  --insertar 3 registros en la tabla(solo cambiale los valores)  
+  INSERT INTO empleado VALUES(5,'yuri',6200,sysdate);
+  
+ select *from empleado; 
+ 
+ 
+ 
+ 
+ 
+ 
+  /* usar un cursor explicitamente para actualizar los sueldos de acuerdo a la sig regla 
+  -si el sueldo es mayor de 6000 actualizar el valor a el sueldo anterior +2000 
+ -si el sueldo es manor o igual a 6000 actualiza a el sueldo anterior + 1000*/ 
+ 
+ 
+
+ 
+ set serveroutput on; 
+ --bloque 
+ declare 
+ --ya sea para actualizar o borrar es for update   y se le agregaria of sueldo para especificar el campo sueldo 
+   cursor cursor_actualizar_emp is select * from empleado for update; 
+   
+begin 
+ 
+   for rec in cursor_actualizar_emp loop 
+  
+  
+    if to_char(rec.fecha, 'dd') = '01' then  
+  
+       if rec.sueldo > 6000 then 
+         update empleado set sueldo=2000 where current of cursor_actualizar_emp; 
+   -- es para que se aplique el cambio en el registro actual en el q se esta iterando 
+       else
+        update empleado set sueldo=rec.sueldo+1000 where current of cursor_actualizar_emp; 
+   
+      end if; 
+    else   
+    
+        dbms_output.put_line('no puedes retirar ');
+   
+      end if; 
+      
+    end loop; 
+         end; 
+         / 
+        select *from empleado; 
+
+
+
+ 
