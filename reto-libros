@@ -34,7 +34,7 @@ set serveroutput on;
 declare
  valor_id integer;
  begin
- guardar_libro(valor_id,'123456','ganadores','la estrategia de los campeones','william h. stein',to_char(fecha_publicacion, 'dd/mm/yyyy') = '01062012');
+ guardar_libros(valor_id,'123456','ganadores','la estrategia de los campeones','william h. stein',to_char(fecha_publicacion, 'dd/mm/yyyy') = '01062012');
 
 end;
  /
