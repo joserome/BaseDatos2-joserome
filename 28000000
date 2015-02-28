@@ -1,0 +1,40 @@
+create table customer(customer_id integer,
+          constraint pk_customer_id primary key(customer_id),name_c varchar2(80),phone_number varchar2(70));
+
+create table orden(orden_id integer,customer_id integer,total float,
+          constraint pk_orden_id primary key(orden_id),
+            constraint fk_customer_id foreign key (customer_id) references customer(customer_id));
+
+
+
+
+create sequence sec_customer
+start with 1
+increment by 1
+nomaxvalue;
+
+create or replace procedure guardar_customer(my_customer_id out integer,
+    my_name_c in varchar2,
+    my_phone_number in varchar2) AS
+    
+    BEGIN
+    SELECT SEC_CUSTOMER.NEXTVAL INTO MY_CUSTOMER_ID FROM DUAL;
+    INSERT INTO
+    
+    END; 
+    /
+    
+
+    SET SERVEROUTPUT ON;
+    DECLARE
+    VALOR INTEGER;
+    BEGIN
+    GUARDAR_CUSTOMER(VALOR,DBMS_RANDOM.STRING('L',8),'01-800-XXX');
+    DBMS_OUTPUT.PUT_LINE('SE INSERTO CON EXITO');
+    END;
+    /
+
+
+
+create or replace procedure guardar_orden(my_orden_id out integer,customer_id int integer,total int  float)
+as
