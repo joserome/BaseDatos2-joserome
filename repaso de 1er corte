@@ -1,0 +1,89 @@
+create table customer (customer_id integer, name_customer varchar2(80), phone_number varchar2(70), 
+constraint pk_customer_id primary key (customer_id));
+
+
+create table customer_order (order_id integer, customer_id integer, total float,
+constraint fk_customer_id foreign key (customer_id) references customer(customer_id));
+
+
+
+create sequence sec_customer_id
+start with 1 
+increment by 1 
+nomaxvalue; 
+
+create sequence sec_order_id
+start with 1 
+increment by 1 
+nomaxvalue; 
+
+  CREATE OR REPLACE PROCEDURE GUARDAR_customer(cus_ID OUT INTEGER, name_cus IN VARCHAR2, phone_num IN varchar2) AS 
+  BEGIN
+  SELECT sec_customer_id.NEXTVAL INTO  cus_ID FROM DUAL;
+  INSERT INTO customer(customer_id, name_customer, phone_number) VALUES(cus_ID, name_cus, phone_num); 
+  END;
+  /
+  
+  DECLARE 
+  VALOR INTEGER;
+  BEGIN
+  FOR i IN 1..8 LOOP
+  GUARDAR_customer(VALOR,SYS.dbms_random.string('l',8),'01-800-xxx');
+  end loop;
+  END;  
+  /
+  
+  CREATE OR REPLACE PROCEDURE GUARDAR_customer_order(ord_ID OUT INTEGER, cus_id IN integer, tot IN float) AS 
+  BEGIN
+  SELECT sec_order_id.NEXTVAL INTO  ord_ID FROM DUAL;
+  INSERT INTO customer_order(order_id, customer_id, total) VALUES(ord_ID, cus_id, round(tot)); 
+  END;
+  /
+  
+  DECLARE 
+  valor integer;
+  id_cust integer;
+  cursor cursor_muestra is SELECT * FROM customer;
+  BEGIN
+  id_cust:=1;
+  for rec in cursor_muestra loop
+  for x in 1..3 loop
+  GUARDAR_customer_order(valor,id_cust,SYS.dbms_random.value(120.0,600.0));
+  end loop;
+  id_cust:=id_cust+1;
+  end loop;
+  END;  
+  /
+  
+  set serveroutput on;
+  DECLARE 
+  subtot integer;
+  id_cust integer;
+  nombre varchar2(80);
+  cursor cursor_muestra is SELECT order_id, name_customer, total FROM customer join customer_order on customer.customer_id = customer_order.customer_id;
+  BEGIN
+  for rec in cursor_muestra loop
+  if rec.order_id=1 then
+  nombre:=rec.name_customer;
+  subtot:=0;
+  end if;
+  if rec.name_customer = nombre then
+  subtot:=subtot+rec.total;
+  else
+  if subtot < 900 then
+  DBMS_OUTPUT.PUT_LINE('Nombre: '||rec.name_customer||', Consumo total:  '||subtot||', Total con descuento:  '||(subtot*.9));
+  else
+  DBMS_OUTPUT.PUT_LINE('Nombre: '||rec.name_customer||', Consumo total:  '||subtot||', Total con descuento:  '||(subtot*.8));
+  END IF;
+  subtot:=0;
+  nombre:=rec.name_customer;
+  end IF;
+  end loop;
+  END;  
+  /
+  
+  SELECT * FROM customer;
+  SELECT * FROM customer_order;
+  SELECT order_id, name_customer, total FROM customer join customer_order on customer.customer_id = customer_order.customer_id
+  
+  
