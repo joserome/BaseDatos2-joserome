@@ -1,0 +1,50 @@
+create table usuario_xxx(id_usuario integer,edad integer)
+
+
+--disparador q impida menores de 18 años
+
+
+--disparador_xxx nombre de trigger
+--before es xq es para validar
+--insert la app en la q se va a utilizar........  si hubiera mas de una operacion es insert,update,delete
+-- for each row   (para cada fila)
+create or replace Trigger disparador_xxx before insert on usuario_xxx for each row
+
+
+begin
+--if :new.edad  si el nuevo campo edad
+if :new.edad<18 then
+raise_application_error(-20001, 'lo siento eres un pervertido');
+end if;
+end;
+/
+
+insert into usuario_xxx values(1,20); 
+
+
+select * from usuario_xxx;
+
+
+--************DISPARADOR DE TIPO BEFORE EN UN UPDATE****************
+
+CREATE TABLE trabajador(id_trabajador integer,nombre varchar2(120),sueldo float)
+
+--inserta un registro
+
+insert into trabajador values(1,'ana',4000);
+
+--crea un disparador q al hacer el update en el sueldo, automaticamente sume el saldo q tenia al nuevo deposito
+
+create or replace Trigger actualizar_trabajador before update  on trabajador for each row
+
+begin
+:new.sueldo:= :old.sueldo+ :new.sueldo;
+
+end;
+/
+
+update trabajador set sueldo=3000 where id_trabajador=1;
+
+SELECT * FROM trabajador;
+
+
