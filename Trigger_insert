@@ -1,0 +1,26 @@
+create table usuario_xxx(id_usuario integer,edad integer)
+
+
+--disparador q impida menores de 18 años
+
+
+--disparador_xxx nombre de trigger
+--before es xq es para validar
+--insert la app en la q se va a utilizar........  si hubiera mas de una operacion es insert,update,delete
+-- for each row   (para cada fila)
+create or replace Trigger disparador_xxx before insert on usuario_xxx for each row
+
+
+begin
+--if :new.edad  si el nuevo campo edad
+if :new.edad<18 then
+raise_application_error(-20001, 'lo siento eres un pervertido');
+end if;
+end;
+/
+
+insert into usuario_xxx values(1,20); 
+insert into usuario_xxx values(1,16); 
+
+
+select * from usuario_xxx;
