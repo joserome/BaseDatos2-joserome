@@ -1,0 +1,21 @@
+--************DISPARADOR DE TIPO BEFORE EN UN UPDATE****************
+
+CREATE TABLE trabajador(id_trabajador integer,nombre varchar2(120),sueldo float)
+
+--inserta un registro
+
+insert into trabajador values(1,'ana',4000);
+
+--crea un disparador q al hacer el update en el sueldo, automaticamente sume el saldo q tenia al nuevo deposito
+
+create or replace Trigger actualizar_trabajador before update  on trabajador for each row
+
+begin
+:new.sueldo:= :old.sueldo+ :new.sueldo;
+
+end;
+/
+
+update trabajador set sueldo=3000 where id_trabajador=1;
+
+SELECT * FROM trabajador;
